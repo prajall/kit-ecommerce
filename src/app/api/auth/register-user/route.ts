@@ -2,6 +2,7 @@ import { prisma } from "@/lib/prisma";
 import { ApiError, ApiResponse } from "@/lib/apiResponse";
 import { NextApiRequest } from "next";
 import { NextRequest, NextResponse } from "next/server";
+import bcrypt from "bcrypt";
 
 export async function POST(request: NextRequest) {
   const { email, password } = await request.json();
@@ -26,8 +27,10 @@ export async function POST(request: NextRequest) {
       return new NextResponse("User already Exist", { status: 409 });
     }
 
+    const hashedPassword = await bcrypt.hash(password, 10);
+
     const registeredUser = await prisma.user.create({
-      data: { email, password },
+      data: { email, password: hashedPassword },
     });
     if (!registeredUser) {
       return new NextResponse("Failed to create User", { status: 500 });

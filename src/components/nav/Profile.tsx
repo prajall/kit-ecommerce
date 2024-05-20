@@ -10,6 +10,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { signOut } from "next-auth/react";
 import { PiSignOutBold } from "react-icons/pi";
+import { redirect } from "next/navigation";
+import Link from "next/link";
 
 type userProps = {
   name: string;
@@ -46,6 +48,9 @@ const Profile = ({ user }: { user: userProps }) => {
               <PiSignOutBold className="mr-1" />
               SignOut
             </button>
+          </DropdownMenuItem>
+          <DropdownMenuItem>
+            <Link href={"/store"}></Link>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

@@ -52,18 +52,27 @@ const LoginZ = () => {
     },
   });
   async function onSubmit(values: z.infer<typeof formSchema>) {
+    console.log("submit requested");
     try {
-      const registeredUser = await axios.post("/api/auth/register-user", {
+      const response = await axios.post("/api/auth/register-user", {
         email: values.email,
         password: values.password,
       });
-      console.log(registeredUser);
+      if (response.status == 200) {
+        const registeredUser = response.data.data;
+        console.log("registeredUser: ", registeredUser);
+        const signInUser = await signIn("credentials", {
+          email: values.email,
+          password: values.password,
+        });
+        if (signInUser) {
+          redirect("/");
+        }
+      }
     } catch (error: any) {
-      if (error.response.data) {
-        console.log(
-          "ERROR HANDLED SUCCESSFULLY: ",
-          error.response.data.message
-        );
+      if (error.response) {
+        // TODO: toast Erorr error.response.data = "user already exist"
+        console.log("ERROR HANDLED SUCCESSFULLY: ", error.response);
       } else {
         console.log("/register ERROR: ", error);
       }

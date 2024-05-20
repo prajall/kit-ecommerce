@@ -6,10 +6,12 @@ import Sidebar from "@/components/Sidebar";
 export default async function Home() {
   return (
     <>
-      <div className="flex">
+      <div className="flex min-h-screen">
         <Sidebar />
-        <main className="">
-          <ShowCarousel />
+        <main className="flex-1 h-full p-4 md:ml-40">
+          <div className="overflow-hidden">
+            <ShowCarousel />
+          </div>
           <section className="mx-auto">
             <NewProduct />
           </section>

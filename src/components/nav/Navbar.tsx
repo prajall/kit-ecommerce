@@ -10,7 +10,7 @@ import Search from "./Search";
 
 const Navbar: React.FC = () => {
   return (
-    <div className="h-16 sticky py-10 flex justify-between items-center">
+    <div className="h-16 py-10 flex justify-between items-center max-w-screen-2xl fixed top-0 left-1/2 -translate-x-1/2 bg-white w-full px-2.5 sm:px-4 lg:px-8 z-50">
       <div className="flex items-center gap-10">
         <Link href="/">
           <Logo />

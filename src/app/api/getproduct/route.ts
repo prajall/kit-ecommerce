@@ -21,4 +21,3 @@ export const POST = async (req: NextRequest) => {
     return NextResponse.json({ "error routets": "error" });
   }
 };
-// this is a minor changes

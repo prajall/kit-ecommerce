@@ -27,19 +27,23 @@ export default function RootLayout({
         <link rel="icon" href="/favicon.ico" />
       </head>
       <body
-        className={cn(font.className, "relative h-full antialiased text-sm")}
+        className={cn(
+          font.className,
+          "relative h-full antialiased max-w-screen-2xl text-sm mx-auto"
+        )}
       >
         <MaxWidthWrapper>
           <Providers>
-            <div className="min-h-screen">
+            <div className="min-h-screen relative">
               <Navbar />
-              <main className=" flex flex-col mx-auto ">
-                <div className="flex-grow flex-1">{children}</div>
-              </main>
+
+              <div className="flex-grow flex-1 mt-16 ">{children}</div>
             </div>
           </Providers>
         </MaxWidthWrapper>
-        <Footer />
+        <div className="hidden md:flex bg-zinc-950">
+          <Footer />
+        </div>
       </body>
     </html>
   );

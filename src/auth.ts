@@ -74,7 +74,7 @@ const config: NextAuthConfig = {
         console.log("/auth Error Signing: ", err);
       }
 
-      return false;
+      return true;
     },
   },
 };

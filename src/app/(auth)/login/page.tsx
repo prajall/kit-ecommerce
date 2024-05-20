@@ -63,7 +63,7 @@ const LoginZ = () => {
     console.log(signinResponse);
 
     setIsSubmittine(false);
-    // redirect("/");
+    redirect("/");
   }
 
   return (
