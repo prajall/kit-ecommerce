@@ -9,7 +9,7 @@ const Admin = () => {
 
   const router = useRouter();
   const redirectBillboard = () => {
-    router.push("/admin/billboard");
+    router.push("/dashboard/billboard");
   };
 
   useEffect(() => {

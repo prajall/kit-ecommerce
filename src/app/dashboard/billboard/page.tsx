@@ -1,4 +1,3 @@
-// pages/admin/billboard.tsx
 "use client";
 import { Button } from "@/components/ui/button";
 import { isAdmin } from "@/lib/authMiddleware";
@@ -6,6 +5,7 @@ import axios from "axios";
 import { Router } from "express";
 import { Trash } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
@@ -18,7 +18,7 @@ interface BillboardProp {
   updatedAt: Date;
 }
 
-const Billboard = () => {
+const BillboardPage = () => {
   const [billboards, setBillboards] = useState<BillboardProp[]>([]);
   const [fetching, setFetching] = useState(false);
 
@@ -27,7 +27,7 @@ const Billboard = () => {
   const fetchBillboards = async () => {
     setFetching(true);
     try {
-      const response = await axios.get("/api/admin/billboard");
+      const response = await axios.get("/api/dashboard/billboard");
       const billboards = response.data.body;
       setBillboards(billboards);
     } catch (error) {
@@ -45,7 +45,7 @@ const Billboard = () => {
     console.log(billboardId);
     try {
       const response = await axios.delete(
-        `/api/admin/billboard/${billboardId}`
+        `/api/dashboard/billboard/${billboardId}`
       );
       console.log(response);
       if (response.status == 200) {
@@ -65,15 +65,9 @@ const Billboard = () => {
   }, []);
 
   return (
-    <>
+    <div className="space-y-4">
       <div>Edit your Billboards</div>
-      <Button
-        onClick={() => {
-          router.push("/admin/billboard/new");
-        }}
-      >
-        Add new billboard
-      </Button>
+      <Link href="/dashboard/billboard/new">Add new billboard</Link>
       {fetching && <p>fetching billboards...</p>}
       <div className="flex gap-2">
         {billboards.map((billboard) => {
@@ -96,8 +90,8 @@ const Billboard = () => {
           );
         })}
       </div>
-    </>
+    </div>
   );
 };
 
-export default Billboard;
+export default BillboardPage;

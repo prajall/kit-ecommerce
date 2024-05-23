@@ -8,10 +8,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { signOut } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import { PiSignOutBold } from "react-icons/pi";
 import { redirect } from "next/navigation";
 import Link from "next/link";
+
+import { RxDashboard } from "react-icons/rx";
 
 type userProps = {
   name: string;
@@ -20,6 +22,7 @@ type userProps = {
 };
 
 const Profile = ({ user }: { user: userProps }) => {
+  const { data } = useSession();
   return (
     <>
       <DropdownMenu>
@@ -37,7 +40,14 @@ const Profile = ({ user }: { user: userProps }) => {
         <DropdownMenuContent className="  mt-1">
           <DropdownMenuLabel>{user.name || user.email}</DropdownMenuLabel>
           <DropdownMenuSeparator />
-
+          {data && data.user?.email == "prajalmhrzn@gmail.com" && (
+            <Link href={"/dashboard"}>
+              <DropdownMenuItem>
+                <RxDashboard className="mr-1" />
+                Dashboard
+              </DropdownMenuItem>
+            </Link>
+          )}
           <DropdownMenuItem className="cursor-pointer hover:bg-slate-100">
             <button
               onClick={() => {
@@ -48,9 +58,6 @@ const Profile = ({ user }: { user: userProps }) => {
               <PiSignOutBold className="mr-1" />
               SignOut
             </button>
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            <Link href={"/store"}></Link>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

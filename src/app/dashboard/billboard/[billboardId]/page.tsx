@@ -9,16 +9,17 @@ const BillboardId = async ({ params }: { params: { billboardId: string } }) => {
   if (params.billboardId == "new")
     return (
       <div>
+        <h2 className="text-lg mt-2 mb-6 ">Upload a new Billboard:</h2>
         <UploadImage />
       </div>
     );
 
   const billboard = await axios.get(
-    `/api/admin/billboard/${params.billboardId}`
+    `/api/dashboard/billboard/${params.billboardId}`
   );
   console.log(billboard);
   if (!billboard) {
-    redirect("/admin/billboard/new");
+    redirect("/dashboard/billboard/new");
   }
   return <div>Billboard Detail</div>;
 };
