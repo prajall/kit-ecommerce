@@ -24,8 +24,7 @@ import Link from "next/link";
 import MaxWidthWrapper from "@/components/MaxWidthWrapper";
 import { FcGoogle } from "react-icons/fc";
 import { PrismaClient } from "@prisma/client";
-
-const prisma = new PrismaClient();
+import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -35,11 +34,12 @@ const formSchema = z.object({
 });
 
 const LoginZ = () => {
+  const router = useRouter();
   const [isSubmitting, setIsSubmittine] = useState(false);
 
   const { data: session } = useSession();
   if (session && session.user) {
-    redirect("/");
+    router.push("/");
   }
 
   const loginWithGoogle = async () => {
@@ -63,7 +63,7 @@ const LoginZ = () => {
     console.log(signinResponse);
 
     setIsSubmittine(false);
-    redirect("/");
+    router.push("/");
   }
 
   return (
