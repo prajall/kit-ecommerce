@@ -10,7 +10,7 @@ import Sidebar from "@/components/Sidebar";
 
 // const inter = Inter({ subsets: ["latin"] });
 const poppins = Poppins({ weight: "500", subsets: ["latin"] });
-const font = Marcellus({ weight: "400", subsets: ["latin"] });
+const font = Poppins({ weight: "400", subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "Kit | Easy Fashion solution",
   description: "Fashion",
