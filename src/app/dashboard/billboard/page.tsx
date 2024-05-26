@@ -3,19 +3,22 @@ import { Button } from "@/components/ui/button";
 import { isAdmin } from "@/lib/authMiddleware";
 import axios from "axios";
 import { Router } from "express";
-import { Trash } from "lucide-react";
+import { Plus, Trash } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
+import { DataTable } from "../(components)/DataTable";
+import { columns } from "./columns";
+import { format, formatDate } from "date-fns";
 
-interface BillboardProp {
+export interface BillboardProp {
   label: string;
   imageUrl: string;
   publicId: string;
   id: string;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: Date | string;
+  updatedAt: Date | string;
 }
 
 const BillboardPage = () => {
@@ -28,8 +31,15 @@ const BillboardPage = () => {
     setFetching(true);
     try {
       const response = await axios.get("/api/dashboard/billboard");
-      const billboards = response.data.body;
-      setBillboards(billboards);
+      const billboards: BillboardProp[] = response.data.body;
+      const updatedBillboards = billboards.map((billboard) => {
+        return {
+          ...billboard,
+          createdAt: format(billboard.createdAt, "P"),
+          updatedAt: format(billboard.updatedAt, "P"),
+        };
+      });
+      setBillboards(updatedBillboards);
     } catch (error) {
       console.error("Error fetching billboards:", error);
     } finally {
@@ -60,36 +70,30 @@ const BillboardPage = () => {
     }
   };
 
+  const handleAddNew = () => {
+    router.push("/dashboard/billboard/new");
+  };
+
   useEffect(() => {
     isAdmin();
   }, []);
 
   return (
-    <div className="space-y-4">
-      <div>Edit your Billboards</div>
-      <Link href="/dashboard/billboard/new">Add new billboard</Link>
-      {fetching && <p>fetching billboards...</p>}
-      <div className="flex gap-2">
-        {billboards.map((billboard) => {
-          return (
-            <div key={billboard.id}>
-              <Image
-                src={billboard.imageUrl}
-                alt={billboard.label}
-                width="400"
-                height="12"
-                className=""
-              />
-              <Button
-                className="m-2"
-                onClick={() => handleDelete(billboard.id)}
-              >
-                <Trash /> Delete
-              </Button>
-            </div>
-          );
-        })}
+    <div className="space-y-4 mt-4">
+      <div className="flex justify-between py-3 ">
+        <h2 className="text-2xl font-semibold">
+          Billboards ({billboards.length}){" "}
+        </h2>
+        <Button
+          variant={"secondary"}
+          className="flex gap-1 bg-blue-600 text-white hover:bg-blue-500 hover:text-white rounded-full"
+          onClick={handleAddNew}
+        >
+          <Plus size={16} />
+          Add New Billboard
+        </Button>
       </div>
+      <DataTable columns={columns} data={billboards} isFetching={fetching} />
     </div>
   );
 };

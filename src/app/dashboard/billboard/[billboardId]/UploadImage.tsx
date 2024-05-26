@@ -110,8 +110,8 @@ const UploadImage: React.FC = () => {
     <>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 ">
-          <div className="md:flex space-y-8 md:gap-4 md:ml-4 xl:ml-6 ml-0">
-            <div className="space-y-8 w-1/2">
+          <div className="lg:flex gap-14 space-y-8 mt-4">
+            <div className="space-y-8 ">
               <FormField
                 control={form.control}
                 name="label"
@@ -122,7 +122,7 @@ const UploadImage: React.FC = () => {
                       <Input
                         placeholder="Label"
                         {...field}
-                        className="w-full sm:w-[400px]"
+                        className="w-full max-w-80"
                       />
                     </FormControl>
                     <FormDescription>
@@ -145,7 +145,7 @@ const UploadImage: React.FC = () => {
                           <Button
                             variant={"outline"}
                             className={cn(
-                              "w-[240px] pl-3 text-left font-normal",
+                              "w-full max-w-80 pl-3 text-left font-normal",
                               !field.value && "text-muted-foreground"
                             )}
                           >
@@ -187,7 +187,7 @@ const UploadImage: React.FC = () => {
                           <Button
                             variant={"outline"}
                             className={cn(
-                              "w-[240px] pl-3 text-left font-normal",
+                              "w-full max-w-80 pl-3 text-left font-normal",
                               !field.value && "text-muted-foreground"
                             )}
                           >
@@ -205,14 +205,11 @@ const UploadImage: React.FC = () => {
                           mode="single"
                           selected={field.value}
                           onSelect={field.onChange}
-                          disabled={(date) => date < new Date("1900-01-01")}
+                          disabled={(date) => date < new Date()}
                           initialFocus
                         />
                       </PopoverContent>
                     </Popover>
-                    {/* <FormDescription>
-                  Your date of birth is used to calculate your age.
-                </FormDescription> */}
                     <FormMessage />
                   </FormItem>
                 )}
@@ -231,7 +228,7 @@ const UploadImage: React.FC = () => {
                         onDrop={handleDrop}
                         onDragOver={handleDragOver}
                         onDragLeave={handleDragLeave}
-                        className="border-2 border-dashed p-6 w-full sm:w-[400px] h-[200px] rounded-lg  border-gray-300 flex flex-col justify-center items-center"
+                        className="border-2 border-dashed p-6 w-full sm:w-[400px] h-[200px] rounded-lg lg:h-full flex flex-col justify-center text-center border-gray-300 "
                       >
                         {!selectedFile && (
                           <div>
@@ -243,6 +240,10 @@ const UploadImage: React.FC = () => {
                                 type="file"
                                 ref={fileInputRef}
                                 className="hidden"
+                                onChange={(e) => {
+                                  setSelectedFile(e.target.files[0]);
+                                  form.setValue("image", e.target.files[0]);
+                                }}
                               />
 
                               <p className="mt-4">
@@ -271,18 +272,21 @@ const UploadImage: React.FC = () => {
                         )}
                       </div>
                       {selectedFile && (
-                        <div className="mt-2 max-w-fit text-sm text-gray-700 border flex gap-2 items-center border-gray-500 py-1 px-2 rounded-full">
-                          <p className="max-w-[200px] overflow-hidden whitespace-nowrap">
-                            {selectedFile.name}
-                          </p>
-                          <button
-                            onClick={() => {
-                              form.setValue("image", null);
-                              setSelectedFile(null);
-                            }}
-                          >
-                            <IoClose />
-                          </button>
+                        <div className="flex gap-1 items-center mt-2">
+                          <p>Selected file: </p>
+                          <div className="max-w-fit text-sm text-gray-700 border flex gap-2 items-center border-gray-500 py-1 px-2 rounded-full">
+                            <p className="max-w-[200px] overflow-hidden whitespace-nowrap">
+                              {selectedFile.name}
+                            </p>
+                            <button
+                              onClick={() => {
+                                form.setValue("image", null);
+                                setSelectedFile(null);
+                              }}
+                            >
+                              <IoClose />
+                            </button>
+                          </div>
                         </div>
                       )}
                     </>

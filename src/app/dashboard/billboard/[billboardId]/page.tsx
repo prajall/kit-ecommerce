@@ -9,7 +9,8 @@ const BillboardId = async ({ params }: { params: { billboardId: string } }) => {
   if (params.billboardId == "new")
     return (
       <div>
-        <h2 className="text-lg mt-2 mb-6 ">Upload a new Billboard:</h2>
+        <h2 className="text-xl font-semibold mt-1 mb-4">Billboards (2)</h2>
+        <p className=" mb- text-lg ">Upload a new Billboard:</p>
         <UploadImage />
       </div>
     );

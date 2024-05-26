@@ -1,3 +1,4 @@
+import Footer from "@/components/Footer";
 import Mens from "@/components/Mens";
 import NewProduct from "@/components/NewProduct";
 import ShowCarousel from "@/components/ShowCarousel";
@@ -19,6 +20,9 @@ export default async function Home() {
             <Mens />
           </section>
         </main>
+      </div>
+      <div className="hidden md:flex bg-zinc-950">
+        <Footer />
       </div>
     </>
   );

@@ -34,16 +34,13 @@ export default function RootLayout({
       >
         <MaxWidthWrapper>
           <Providers>
-            <div className="min-h-screen relative">
+            <div className=" relative">
               <Navbar />
 
               <div className="flex-grow flex-1 mt-16 ">{children}</div>
             </div>
           </Providers>
         </MaxWidthWrapper>
-        <div className="hidden md:flex bg-zinc-950">
-          <Footer />
-        </div>
       </body>
     </html>
   );

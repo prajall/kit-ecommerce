@@ -5,7 +5,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
   const formData = await request.formData();
-  const label = formData.get("label");
+  const label = formData.get("label")?.toString();
   console.log(label);
   const image = formData.get("image") as unknown as File;
   if (!label || !image) {
@@ -20,7 +20,7 @@ export async function POST(request: NextRequest) {
     const mongodbResponse = await prisma.billboard.create({
       data: {
         imageUrl: response.url,
-        label: "testlabel",
+        label: label,
         publicId: response.public_id,
       },
     });
