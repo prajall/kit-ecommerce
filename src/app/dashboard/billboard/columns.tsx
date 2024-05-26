@@ -1,8 +1,8 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { BillboardProp } from "./page";
 import Link from "next/link";
+import { BillboardProp } from "./types";
 
 export const columns: ColumnDef<BillboardProp>[] = [
   {
@@ -20,5 +20,18 @@ export const columns: ColumnDef<BillboardProp>[] = [
   {
     accessorKey: "createdAt",
     header: "Created At",
+  },
+  {
+    accessorKey: "action",
+    header: "Action",
+    cell: ({ row }) => {
+      const link: string = row.original.id;
+      console.log("link: ", link);
+      return (
+        <Link href={`/dashboard/billboard/${link}`} className="hover:underline">
+          view
+        </Link>
+      );
+    },
   },
 ];

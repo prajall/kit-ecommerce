@@ -41,9 +41,9 @@ const Links: LinkProp[] = [
 
 const DashboardSidebar = () => {
   return (
-    <div className="hidden md:flex flex-col w-44 h-full border-r border-gray-200 fixed ">
-      <h2 className="text-xl font font-semibold ">Dashboard</h2>
-      <div className="space-y-2 mt-6">
+    <div className="pr-2 py-3 hidden md:flex flex-col w-40 xl:w-48 h-full border-r border-gray-200 fixed ">
+      {/* <h2 className="text-xl font font-semibold ">Dashboard</h2> */}
+      <div className="space-y-2 ">
         {Links.map((link) => (
           <Link
             href={link.link}

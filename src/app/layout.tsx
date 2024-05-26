@@ -1,15 +1,12 @@
-import type { Metadata } from "next";
-import { Inter, Marcellus, Poppins } from "next/font/google";
-import "./globals.css";
-import { cn } from "@/lib/utils";
-import Navbar from "@/components/nav/Navbar";
-import Providers from "@/components/Providers";
 import MaxWidthWrapper from "@/components/MaxWidthWrapper";
-import Footer from "@/components/Footer";
-import Sidebar from "@/components/Sidebar";
+import Providers from "@/components/Providers";
+import Navbar from "@/components/nav/Navbar";
+import { cn } from "@/lib/utils";
+import type { Metadata } from "next";
+import { Poppins } from "next/font/google";
+import "./globals.css";
+import { Toaster } from "react-hot-toast";
 
-// const inter = Inter({ subsets: ["latin"] });
-const poppins = Poppins({ weight: "500", subsets: ["latin"] });
 const font = Poppins({ weight: "400", subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "Kit | Easy Fashion solution",
@@ -32,6 +29,7 @@ export default function RootLayout({
           "relative h-full antialiased max-w-screen-2xl text-sm mx-auto"
         )}
       >
+        <Toaster />
         <MaxWidthWrapper>
           <Providers>
             <div className=" relative">

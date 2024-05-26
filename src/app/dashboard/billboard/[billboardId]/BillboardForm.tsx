@@ -29,15 +29,25 @@ import {
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 import { CalendarIcon } from "lucide-react";
+import { toast } from "react-toastify";
+import { BillboardProp } from "../page";
 
 const formSchema = z.object({
   label: z.string().min(2).max(50),
   image: z.instanceof(File),
-  showFrom: z.date(),
-  endAt: z.date(),
+  showDate: z.date(),
+  endDate: z.date(),
 });
 
-const UploadImage: React.FC = () => {
+interface BillboardFormProps {
+  onSubmitBillboardForm: (event: React.FormEvent<HTMLFormElement>) => void;
+  initialData?: BillboardProp;
+}
+
+const BillboardForm: React.FC<BillboardFormProps> = ({
+  onSubmitBillboardForm,
+  initialData,
+}) => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [billboardLabel, setBillboardLabel] = useState<string>("");
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -48,28 +58,14 @@ const UploadImage: React.FC = () => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      showFrom: new Date(),
+      image: initialData?.imageUrl,
+      endDate: initialData?.endDate,
+      label: initialData?.label,
+      showDate: initialData ? initialData.showDate : new Date(),
     },
   });
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log("values", values);
-    const formData = new FormData();
-    formData.append("image", values.image);
-    formData.append("label", values.label);
-
-    try {
-      const response = await axios.post("/api/dashboard/billboard", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-      console.log("Image uploaded successfully:", response);
-      if (response.status == 200) {
-        router.push("/dashboard/billboard");
-      }
-    } catch (error) {
-      console.error("Error uploading image:", error);
-    }
+    onSubmitBillboardForm(values);
   }
 
   const handleFileInput = (event: ChangeEvent<HTMLInputElement>) => {
@@ -110,8 +106,8 @@ const UploadImage: React.FC = () => {
     <>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 ">
-          <div className="lg:flex gap-14 space-y-8 mt-4">
-            <div className="space-y-8 ">
+          <div className="lg:flex gap-14 space-y-8 lg:space-y-0 mt-4 h-fit">
+            <div className="space-y-8 lg:w-1/2">
               <FormField
                 control={form.control}
                 name="label"
@@ -122,12 +118,10 @@ const UploadImage: React.FC = () => {
                       <Input
                         placeholder="Label"
                         {...field}
-                        className="w-full max-w-80"
+                        className="w-full py-6 "
                       />
                     </FormControl>
-                    <FormDescription>
-                      This wont be displayed in the main page
-                    </FormDescription>
+
                     <FormMessage />
                   </FormItem>
                 )}
@@ -135,7 +129,7 @@ const UploadImage: React.FC = () => {
 
               <FormField
                 control={form.control}
-                name="showFrom"
+                name="showDate"
                 render={({ field }) => (
                   <FormItem className="flex flex-col">
                     <FormLabel>Start Showing Billboard</FormLabel>
@@ -145,7 +139,7 @@ const UploadImage: React.FC = () => {
                           <Button
                             variant={"outline"}
                             className={cn(
-                              "w-full max-w-80 pl-3 text-left font-normal",
+                              "w-full pl-3 py-6 text-left font-normal",
                               !field.value && "text-muted-foreground"
                             )}
                           >
@@ -177,7 +171,7 @@ const UploadImage: React.FC = () => {
               />
               <FormField
                 control={form.control}
-                name="endAt"
+                name="endDate"
                 render={({ field }) => (
                   <FormItem className="flex flex-col">
                     <FormLabel>Remove Billboard</FormLabel>
@@ -187,7 +181,7 @@ const UploadImage: React.FC = () => {
                           <Button
                             variant={"outline"}
                             className={cn(
-                              "w-full max-w-80 pl-3 text-left font-normal",
+                              "w-full pl-3 py-6 text-left font-normal",
                               !field.value && "text-muted-foreground"
                             )}
                           >
@@ -215,86 +209,88 @@ const UploadImage: React.FC = () => {
                 )}
               />
             </div>
-            <FormField
-              control={form.control}
-              name="image"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Upload an Image</FormLabel>
-                  <FormControl>
-                    <>
-                      <div
-                        ref={dropzoneRef}
-                        onDrop={handleDrop}
-                        onDragOver={handleDragOver}
-                        onDragLeave={handleDragLeave}
-                        className="border-2 border-dashed p-6 w-full sm:w-[400px] h-[200px] rounded-lg lg:h-full flex flex-col justify-center text-center border-gray-300 "
-                      >
-                        {!selectedFile && (
-                          <div>
-                            <LuUpload size={70} className="mx-auto" />
-                            <>
-                              <input
-                                placeholder="shadcn"
-                                {...field}
-                                type="file"
-                                ref={fileInputRef}
-                                className="hidden"
-                                onChange={(e) => {
-                                  setSelectedFile(e.target.files[0]);
-                                  form.setValue("image", e.target.files[0]);
-                                }}
-                              />
+            <div className="lg:w-1/2 min-h-[250px] lg:min-h-full lg:mt-0">
+              <FormField
+                control={form.control}
+                name="image"
+                render={({ field }) => (
+                  <FormItem className="h-full">
+                    <FormLabel>Upload Image for Billboard</FormLabel>
+                    <FormControl>
+                      <>
+                        <div
+                          ref={dropzoneRef}
+                          onDrop={handleDrop}
+                          onDragOver={handleDragOver}
+                          onDragLeave={handleDragLeave}
+                          className="border-2 border-dashed p-4 w-full rounded-lg h-full flex flex-col justify-center text-center border-gray-300 "
+                        >
+                          {!selectedFile && (
+                            <div>
+                              <LuUpload size={70} className="mx-auto" />
+                              <>
+                                <input
+                                  placeholder="shadcn"
+                                  {...field}
+                                  type="file"
+                                  ref={fileInputRef}
+                                  className="hidden"
+                                  onChange={(e) => {
+                                    setSelectedFile(e.target.files[0]);
+                                    form.setValue("image", e.target.files[0]);
+                                  }}
+                                />
 
-                              <p className="mt-4">
-                                Drag 'n' drop to upload Image
-                              </p>
-                              <p className="text-center">
-                                or{" "}
-                                <span
-                                  onClick={handleClickToAdd}
-                                  className="hover:underline text-blue-800 cursor-pointer"
-                                >
-                                  Browse
-                                </span>
-                              </p>
+                                <p className="mt-4">
+                                  Drag 'n' drop to upload Image
+                                </p>
+                                <p className="text-center">
+                                  or{" "}
+                                  <span
+                                    onClick={handleClickToAdd}
+                                    className="hover:underline text-blue-800 cursor-pointer"
+                                  >
+                                    Browse
+                                  </span>
+                                </p>
+                              </>
+                            </div>
+                          )}
+                          {selectedFile && (
+                            <>
+                              <img
+                                src={window.URL.createObjectURL(selectedFile)}
+                                alt={selectedFile.name}
+                                className="max-h-[150px]"
+                              />
                             </>
-                          </div>
-                        )}
-                        {selectedFile && (
-                          <>
-                            <img
-                              src={window.URL.createObjectURL(selectedFile)}
-                              alt={selectedFile.name}
-                              className="max-h-[150px]"
-                            />
-                          </>
-                        )}
-                      </div>
-                      {selectedFile && (
-                        <div className="flex gap-1 items-center mt-2">
-                          <p>Selected file: </p>
-                          <div className="max-w-fit text-sm text-gray-700 border flex gap-2 items-center border-gray-500 py-1 px-2 rounded-full">
-                            <p className="max-w-[200px] overflow-hidden whitespace-nowrap">
-                              {selectedFile.name}
-                            </p>
-                            <button
-                              onClick={() => {
-                                form.setValue("image", null);
-                                setSelectedFile(null);
-                              }}
-                            >
-                              <IoClose />
-                            </button>
-                          </div>
+                          )}
                         </div>
-                      )}
-                    </>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+                        {selectedFile && (
+                          <div className="flex gap-1 items-center mt-2">
+                            <p>Selected file: </p>
+                            <div className="max-w-fit text-sm text-gray-700 border flex gap-2 items-center border-gray-500 py-1 px-2 rounded-full">
+                              <p className="max-w-[200px] overflow-hidden whitespace-nowrap">
+                                {selectedFile.name}
+                              </p>
+                              <button
+                                onClick={() => {
+                                  form.setValue("image", null);
+                                  setSelectedFile(null);
+                                }}
+                              >
+                                <IoClose />
+                              </button>
+                            </div>
+                          </div>
+                        )}
+                      </>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
           </div>
           <Button type="submit">Submit</Button>
         </form>
@@ -303,4 +299,4 @@ const UploadImage: React.FC = () => {
   );
 };
 
-export default UploadImage;
+export default BillboardForm;

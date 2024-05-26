@@ -13,7 +13,8 @@ import { PiSignOutBold } from "react-icons/pi";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 
-import { RxDashboard } from "react-icons/rx";
+import { LuLayoutDashboard } from "react-icons/lu";
+import { LayoutDashboard } from "lucide-react";
 
 type userProps = {
   name: string;
@@ -41,12 +42,12 @@ const Profile = ({ user }: { user: userProps }) => {
           <DropdownMenuLabel>{user.name || user.email}</DropdownMenuLabel>
           <DropdownMenuSeparator />
           {data && data.user?.email == "prajalmhrzn@gmail.com" && (
-            <Link href={"/dashboard"}>
-              <DropdownMenuItem>
-                <RxDashboard className="mr-1" />
+            <DropdownMenuItem>
+              <Link href={"/dashboard"} className="flex ">
+                <LayoutDashboard className="mr-1" size={16} />
                 Dashboard
-              </DropdownMenuItem>
-            </Link>
+              </Link>
+            </DropdownMenuItem>
           )}
           <DropdownMenuItem className="cursor-pointer hover:bg-slate-100">
             <button
@@ -55,7 +56,7 @@ const Profile = ({ user }: { user: userProps }) => {
               }}
               className="flex justify-between items-center"
             >
-              <PiSignOutBold className="mr-1" />
+              <PiSignOutBold className="mr-1" size={16} />
               SignOut
             </button>
           </DropdownMenuItem>

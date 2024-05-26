@@ -11,15 +11,9 @@ import React, { useEffect, useState } from "react";
 import { DataTable } from "../(components)/DataTable";
 import { columns } from "./columns";
 import { format, formatDate } from "date-fns";
-
-export interface BillboardProp {
-  label: string;
-  imageUrl: string;
-  publicId: string;
-  id: string;
-  createdAt: Date | string;
-  updatedAt: Date | string;
-}
+import toast from "react-hot-toast";
+import Header from "../(components)/Header";
+import { BillboardProp } from "./types";
 
 const BillboardPage = () => {
   const [billboards, setBillboards] = useState<BillboardProp[]>([]);
@@ -31,12 +25,12 @@ const BillboardPage = () => {
     setFetching(true);
     try {
       const response = await axios.get("/api/dashboard/billboard");
-      const billboards: BillboardProp[] = response.data.body;
+      const billboards: BillboardProp[] = response.data.data;
       const updatedBillboards = billboards.map((billboard) => {
         return {
           ...billboard,
           createdAt: format(billboard.createdAt, "P"),
-          updatedAt: format(billboard.updatedAt, "P"),
+          showDate: format(billboard.createdAt, "P"),
         };
       });
       setBillboards(updatedBillboards);
@@ -79,22 +73,25 @@ const BillboardPage = () => {
   }, []);
 
   return (
-    <div className="space-y-4 mt-4">
-      <div className="flex justify-between py-3 ">
-        <h2 className="text-2xl font-semibold">
-          Billboards ({billboards.length}){" "}
-        </h2>
-        <Button
-          variant={"secondary"}
-          className="flex gap-1 bg-blue-600 text-white hover:bg-blue-500 hover:text-white rounded-full"
-          onClick={handleAddNew}
-        >
-          <Plus size={16} />
-          Add New Billboard
-        </Button>
+    <>
+      <div className="space-y-4">
+        <div className="flex justify-between py-3 items-center ">
+          <Header
+            title={`Billboard (${billboards.length})`}
+            description="Manage Billboards for you store"
+          />
+          <Button
+            variant={"default"}
+            className="flex gap-1 rounded-full"
+            onClick={handleAddNew}
+          >
+            <Plus size={16} />
+            Add New Billboard
+          </Button>
+        </div>
+        <DataTable columns={columns} data={billboards} isFetching={fetching} />
       </div>
-      <DataTable columns={columns} data={billboards} isFetching={fetching} />
-    </div>
+    </>
   );
 };
 

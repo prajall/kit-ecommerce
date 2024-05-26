@@ -1,4 +1,5 @@
-import React from "react";
+"use client";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import homepageImage from "../../public/homepageImage.png";
 import { Button } from "@/components/ui/button";
@@ -11,48 +12,45 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
+import axios from "axios";
+import { BillboardProp } from "@/app/dashboard/billboard/types";
 
 const ShowCarousel = () => {
+  const [billboards, setBillboards] = useState<BillboardProp[]>([]);
+
+  const fetchBillboards = async () => {
+    const response = await axios.get("/api/dashboard/billboard");
+    setBillboards(response.data.data);
+  };
+
+  useEffect(() => {
+    fetchBillboards();
+  }, []);
+
   return (
     <Carousel className="">
       <CarouselPrevious />
       <CarouselContent className="shadow-lg ">
         <CarouselItem>
-          <Image
-            src={
-              "https://dkemhji6i1k0x.cloudfront.net/000_clients/84990/page/84990F5y57DsP.jpg"
-            }
-            width={900}
-            height={270}
+          <img
+            src="https://marketplace.canva.com/EAFm8iOoAwE/2/0/1600w/canva-beige-aesthetic-fashion-billboard-6ClZyJWO5cA.jpg"
+            width={"900"}
+            height={"300"}
             alt="ImageBanner"
-            className="w-full "
+            className="w-full"
           />
         </CarouselItem>
-
-        <CarouselItem>
-          <Image
-            src={
-              "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSj0ZaFLeA044RXhcBP2ry1-lGKYH9w8x-D7Y1GaAI0Cg&s"
-            }
-            width={900}
-            height={270}
-            alt="ImageBanner"
-            className="w-full aspect-[10/3]"
-          />
-        </CarouselItem>
-        <CarouselItem>
-          <Image
-            src={
-              "https://dkemhji6i1k0x.cloudfront.net/000_clients/84990/page/84990yNL7ADjD.jpg"
-            }
-            width={900}
-            height={270}
-            alt="ImageBanner"
-            // width={700}
-            // height={350}
-            className="w-full aspect-[10/3]"
-          />
-        </CarouselItem>
+        {billboards.map((billboard) => (
+          <CarouselItem>
+            <img
+              src={billboard.imageUrl}
+              width={"900"}
+              height={"300"}
+              alt="ImageBanner"
+              className="w-full"
+            />
+          </CarouselItem>
+        ))}
       </CarouselContent>
       <CarouselNext />
     </Carousel>

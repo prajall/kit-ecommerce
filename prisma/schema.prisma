@@ -38,6 +38,8 @@ model Billboard {
   label     String
   imageUrl  String
   publicId  String
+  showDate  String
+  endDate   String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }

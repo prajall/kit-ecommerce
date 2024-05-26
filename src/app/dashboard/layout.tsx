@@ -23,7 +23,7 @@ const AdminLayout = async ({ children }: { children: React.ReactNode }) => {
   return (
     <>
       <DashboardSidebar />
-      <div className={cn(font.className, "mt-20 md:ml-44 px-4")}>
+      <div className={cn(font.className, "mt-20 md:ml-40 xl:ml-48 px-6")}>
         <div>{children}</div>
       </div>
     </>
