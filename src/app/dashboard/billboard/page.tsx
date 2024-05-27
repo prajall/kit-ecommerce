@@ -25,7 +25,7 @@ const BillboardPage = () => {
     setFetching(true);
     try {
       const response = await axios.get("/api/dashboard/billboard");
-      const billboards: BillboardProp[] = response.data.data;
+      const billboards: BillboardProp[] = response.data;
       const updatedBillboards = billboards.map((billboard) => {
         return {
           ...billboard,
@@ -77,7 +77,7 @@ const BillboardPage = () => {
       <div className="space-y-4">
         <div className="flex justify-between py-3 items-center ">
           <Header
-            title={`Billboard (${billboards.length})`}
+            title={`Billboards (${billboards.length})`}
             description="Manage Billboards for you store"
           />
           <Button

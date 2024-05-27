@@ -1,3 +1,4 @@
+import { isAdmin } from "@/lib/authMiddleware";
 import { uploadOnCloudinary } from "@/lib/cloudinary";
 import { prisma } from "@/lib/prisma";
 import { format } from "date-fns";
@@ -9,12 +10,16 @@ export async function POST(request: NextRequest) {
   const label = formData.get("label")?.toString();
   const showDate = formData.get("showDate")?.toString();
   const endDate = formData.get("endDate")?.toString();
-
   const image = formData.get("image") as unknown as File;
+
+  console.log(label, showDate, endDate, typeof image);
+
   if (!label || !image || !showDate || !endDate) {
-    return NextResponse.json(
-      { message: "All fields are required" },
-      { status: 400 }
+    return new NextResponse("All fields are required", { status: 404 });
+  }
+  if (!isAdmin) {
+    return new NextResponse(
+      "You donot have the permission to perform this action"
     );
   }
   try {
@@ -30,23 +35,22 @@ export async function POST(request: NextRequest) {
         endDate: endDate,
       },
     });
-    console.log(mongodbResponse);
-    return new NextResponse("Billboard uploaded successfully", { status: 200 });
+    if (!mongodbResponse) {
+      return new NextResponse("Failed to upload billboard", { status: 500 });
+    }
+    return NextResponse.json(mongodbResponse);
   } catch (error) {
     console.log("billboard route error: ", error);
-    return new NextResponse("Something went wrong");
+    return new NextResponse("Something went wrong: Internal Server Error");
   }
 }
 
 export async function GET() {
   try {
     const billboards = await prisma.billboard.findMany();
-    return NextResponse.json({ data: billboards }, { status: 200 });
+    return NextResponse.json(billboards);
   } catch (error) {
     console.error("Error fetching billboards:", error);
-    return NextResponse.json(
-      { message: "Internal Server Error" },
-      { status: 500 }
-    );
+    return new NextResponse("Internal Server Error", { status: 500 });
   }
 }

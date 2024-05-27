@@ -4,7 +4,7 @@
 import { Button } from "@/components/ui/button";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import React, { ChangeEvent, useRef, useState } from "react";
+import React, { ChangeEvent, useEffect, useRef, useState } from "react";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -49,18 +49,19 @@ const BillboardForm: React.FC<BillboardFormProps> = ({
   initialData,
 }) => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [billboardLabel, setBillboardLabel] = useState<string>("");
+  const [initialImage, setInitialImage] = useState(true);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const dropzoneRef = useRef<HTMLDivElement>(null);
 
+  console.log(initialData);
   const router = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      image: initialData?.image,
-      endDate: initialData?.endDate,
-      label: initialData?.label,
+      image: initialData.image,
+      endDate: initialData.endDate,
+      label: initialData.label,
       showDate: initialData ? initialData.showDate : new Date(),
     },
   });
@@ -162,9 +163,7 @@ const BillboardForm: React.FC<BillboardFormProps> = ({
                         />
                       </PopoverContent>
                     </Popover>
-                    {/* <FormDescription>
-                  Your date of birth is used to calculate your age.
-                </FormDescription> */}
+
                     <FormMessage />
                   </FormItem>
                 )}
@@ -225,7 +224,7 @@ const BillboardForm: React.FC<BillboardFormProps> = ({
                           onDragLeave={handleDragLeave}
                           className="border-2 border-dashed p-4 w-full rounded-lg h-full flex flex-col justify-center text-center border-gray-300 "
                         >
-                          {!selectedFile && (
+                          {!selectedFile && !initialImage && (
                             <div>
                               <LuUpload size={70} className="mx-auto" />
                               <>
@@ -265,6 +264,15 @@ const BillboardForm: React.FC<BillboardFormProps> = ({
                               />
                             </>
                           )}
+                          {initialImage && (
+                            <>
+                              <img
+                                src={initialData.imageUrl}
+                                alt={selectedFile.name}
+                                className="max-h-[150px]"
+                              />
+                            </>
+                          )}
                         </div>
                         {selectedFile && (
                           <div className="flex gap-1 items-center mt-2">
@@ -277,6 +285,7 @@ const BillboardForm: React.FC<BillboardFormProps> = ({
                                 onClick={() => {
                                   form.setValue("image", null);
                                   setSelectedFile(null);
+                                  setInitialImage(false);
                                 }}
                               >
                                 <IoClose />

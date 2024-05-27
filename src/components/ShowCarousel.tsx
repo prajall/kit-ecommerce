@@ -20,7 +20,7 @@ const ShowCarousel = () => {
 
   const fetchBillboards = async () => {
     const response = await axios.get("/api/dashboard/billboard");
-    setBillboards(response.data.data);
+    setBillboards(response.data);
   };
 
   useEffect(() => {

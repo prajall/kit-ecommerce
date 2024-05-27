@@ -7,8 +7,12 @@ import toast from "react-hot-toast";
 import { useEffect, useState } from "react";
 import { BillboardProp } from "../types";
 import { useRouter } from "next/navigation";
+import Loading from "@/app/loading";
 
-const BillboardId = async ({ params }: { params: { billboardId: string } }) => {
+const BillboardId = ({ params }: { params: { billboardId: string } }) => {
+  const billboardId = params.billboardId;
+  const [fetchingBillboard, setFetchingBillboard] = useState(true);
+
   const router = useRouter();
 
   const postBillboard = async (data: any) => {
@@ -54,15 +58,24 @@ const BillboardId = async ({ params }: { params: { billboardId: string } }) => {
 
   const [billboardDetail, setBillboardDetail] = useState<BillboardProp>();
 
+  async function urlToFile(imageUrl: string): Promise<File> {
+    const response = await fetch(imageUrl);
+    const blob = await response.blob();
+    const fileName = imageUrl.split("/").pop() || "image.jpg"; // Extract file name from URL or use default name
+    const file = new File([blob], fileName, { type: blob.type });
+    return file;
+  }
+
   const fetchBillboard = async () => {
-    const response = await axios.get(
-      `/api/dashboard/billboard/${params.billboardId}`
-    );
-    if (!response.data.billboard) {
-      redirect("/dashboard/billboard/new");
-    } else {
-      setBillboardDetail(response.data.billboard);
+    console.log("Fetching Billboard Details");
+    const response = await axios.get(`/api/dashboard/billboard/${billboardId}`);
+    if (!response.data) {
+      router.push("/dashboard/billboard/new");
     }
+    const imageFile = urlToFile(response.data.imageUrl);
+    const billboardWithImage = { ...response.data, image: imageFile };
+    setBillboardDetail(billboardWithImage);
+    setFetchingBillboard(false);
   };
   useEffect(() => {
     fetchBillboard();
@@ -72,10 +85,14 @@ const BillboardId = async ({ params }: { params: { billboardId: string } }) => {
       <div>
         <Header title="Edit Billboard" description="Edit your billboard" />
       </div>
-      <BillboardForm
-        onSubmitBillboardForm={patchBillboard}
-        initialData={billboardDetail}
-      />
+      {fetchingBillboard && <Loading />}
+
+      {!fetchingBillboard && (
+        <BillboardForm
+          onSubmitBillboardForm={patchBillboard}
+          initialData={billboardDetail}
+        />
+      )}
     </div>
   );
 };
