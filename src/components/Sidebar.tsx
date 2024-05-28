@@ -20,7 +20,11 @@ const Sidebar = () => {
       <p className="text-muted-foreground mb-2">Categories</p>
       <div className="cursor-pointer w-full ml-3">
         {categories.map((category) => (
-          <Link href={"/category/mens"} className="flex gap-1 items-center">
+          <Link
+            href={"/category/mens"}
+            className="flex gap-1 items-center"
+            key={category.title}
+          >
             {category.icon}
             <p className="py-2 my-1">{category.title}</p>
           </Link>

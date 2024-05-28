@@ -8,40 +8,14 @@ import { useEffect, useState } from "react";
 import { BillboardProp } from "../types";
 import { useRouter } from "next/navigation";
 import Loading from "@/app/loading";
+import EditBillboardForm from "./EditBillboard";
 
 const BillboardId = ({ params }: { params: { billboardId: string } }) => {
   const billboardId = params.billboardId;
   const [fetchingBillboard, setFetchingBillboard] = useState(true);
+  const [billboardDetail, setBillboardDetail] = useState<BillboardProp>();
 
   const router = useRouter();
-
-  const postBillboard = async (data: any) => {
-    console.log(data);
-    const formData = new FormData();
-    formData.append("image", data.image);
-    formData.append("label", data.label);
-    formData.append("showDate", data.showDate);
-    formData.append("endDate", data.endDate);
-
-    console.log(formData);
-
-    try {
-      const response = await axios.post("/api/dashboard/billboard", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-      console.log("Image uploaded successfully:", response);
-
-      if (response.status == 200) {
-        toast.success("Billboard Uploaded Successfully");
-        redirect("/dashboard/billboard");
-      }
-    } catch (error) {
-      console.error("Error uploading image:", error);
-    }
-    // router.push("/dashboard/billboard");
-  };
 
   const patchBillboard = async () => {};
 
@@ -52,11 +26,9 @@ const BillboardId = ({ params }: { params: { billboardId: string } }) => {
           title="New Billboard"
           description="Add a new billboard to the homescreen "
         />
-        <BillboardForm onSubmitBillboardForm={postBillboard} />
+        <BillboardForm />
       </div>
     );
-
-  const [billboardDetail, setBillboardDetail] = useState<BillboardProp>();
 
   async function urlToFile(imageUrl: string): Promise<File> {
     const response = await fetch(imageUrl);
@@ -66,15 +38,26 @@ const BillboardId = ({ params }: { params: { billboardId: string } }) => {
     return file;
   }
 
+  const StringToDate = (string: string) => {
+    return new Date(string);
+  };
+
   const fetchBillboard = async () => {
     console.log("Fetching Billboard Details");
     const response = await axios.get(`/api/dashboard/billboard/${billboardId}`);
     if (!response.data) {
       router.push("/dashboard/billboard/new");
     }
-    const imageFile = urlToFile(response.data.imageUrl);
-    const billboardWithImage = { ...response.data, image: imageFile };
-    setBillboardDetail(billboardWithImage);
+    const imageFile = await urlToFile(response.data.imageUrl);
+    const showDate = StringToDate(response.data.showDate);
+    const endDate = StringToDate(response.data.endDate);
+    const formattedBillboard = {
+      ...response.data,
+      image: imageFile,
+      showDate: showDate,
+      endDate: endDate,
+    };
+    setBillboardDetail(formattedBillboard);
     setFetchingBillboard(false);
   };
   useEffect(() => {
@@ -88,7 +71,7 @@ const BillboardId = ({ params }: { params: { billboardId: string } }) => {
       {fetchingBillboard && <Loading />}
 
       {!fetchingBillboard && (
-        <BillboardForm
+        <EditBillboardForm
           onSubmitBillboardForm={patchBillboard}
           initialData={billboardDetail}
         />

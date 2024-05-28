@@ -39,17 +39,9 @@ const formSchema = z.object({
   endDate: z.date(),
 });
 
-interface BillboardFormProps {
-  onSubmitBillboardForm: (event: React.FormEvent<HTMLFormElement>) => void;
-  initialData?: BillboardProp;
-}
-
-const BillboardForm: React.FC<BillboardFormProps> = ({
-  onSubmitBillboardForm,
-  initialData,
-}) => {
+const BillboardForm: React.FC<BillboardFormProps> = ({}) => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [billboardLabel, setBillboardLabel] = useState<string>("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const dropzoneRef = useRef<HTMLDivElement>(null);
 
@@ -58,14 +50,37 @@ const BillboardForm: React.FC<BillboardFormProps> = ({
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      image: initialData?.image,
-      endDate: initialData?.endDate,
-      label: initialData?.label,
-      showDate: initialData ? initialData.showDate : new Date(),
+      showDate: new Date(),
     },
   });
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    onSubmitBillboardForm(values);
+    setIsSubmitting(true);
+    const formData = new FormData();
+    formData.append("image", values.image);
+    formData.append("label", values.label);
+    formData.append("showDate", values.showDate);
+    formData.append("endDate", values.endDate);
+
+    console.log(formData);
+
+    try {
+      const response = await axios.post("/api/dashboard/billboard", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      console.log("Image uploaded successfully:", response);
+
+      if (response.status == 200) {
+        toast.success("Billboard Uploaded Successfully");
+        redirect("/dashboard/billboard");
+      }
+    } catch (error) {
+      console.error("Error uploading image:", error);
+    } finally {
+      setIsSubmitting(false);
+      router.push("/dashboard/billboard");
+    }
   }
 
   const handleFileInput = (event: ChangeEvent<HTMLInputElement>) => {
@@ -292,7 +307,9 @@ const BillboardForm: React.FC<BillboardFormProps> = ({
               />
             </div>
           </div>
-          <Button type="submit">Submit</Button>
+          <Button type="submit" disabled={isSubmitting}>
+            Submit
+          </Button>
         </form>
       </Form>
     </>

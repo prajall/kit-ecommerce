@@ -82,11 +82,11 @@ const BillboardPage = () => {
           />
           <Button
             variant={"default"}
-            className="flex gap-1 rounded-full"
+            className="flex gap-1 p-0 md:px-4 md:py-2 aspect-square md:aspect-auto rounded-full"
             onClick={handleAddNew}
           >
             <Plus size={16} />
-            Add New Billboard
+            <span className="hidden md:flex">Add New Billboard</span>
           </Button>
         </div>
         <DataTable columns={columns} data={billboards} isFetching={fetching} />
