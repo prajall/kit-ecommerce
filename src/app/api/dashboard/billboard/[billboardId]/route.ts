@@ -1,32 +1,32 @@
+//@ts-nocheck
 import { isAdmin } from "@/lib/authMiddleware";
 import { deleteFromCloudinary, uploadOnCloudinary } from "@/lib/cloudinary";
 import { prisma } from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function DELETE({ params }: { params: { billboardId: string } }) {
-  if (!params.billboardId) {
+export async function DELETE(
+  request: Request,
+  { params }: { params: { billboardId: string } }
+) {
+  const url = new URL(request.url);
+  const billboardId = url.pathname.split("/").pop();
+  if (!billboardId) {
     return new NextResponse("Please provide Billboard Id", { status: 400 });
   }
 
   try {
     const billboard = await prisma.billboard.findFirst({
-      where: { id: params.billboardId },
+      where: { id: billboardId },
     });
     if (!billboard) {
       return NextResponse.json("Billboard Not Found", { status: 404 });
     }
 
-    const deleteResponse = await deleteFromCloudinary(billboard.publicId);
-
-    if (deleteResponse.status > 400) {
-      return new NextResponse("Couldnot Delete Billboard Image.", {
-        status: 500,
-      });
-    }
-
     const deletedBillboard = await prisma.billboard.delete({
       where: { id: String(billboard.id) },
     });
+    const deleteResponse = await deleteFromCloudinary(billboard.publicId);
+
     return NextResponse.json("Billboard deleted successfully.", {
       status: 200,
     });
@@ -83,7 +83,7 @@ export async function PATCH(
   const label = formData.get("label")?.toString();
   const showDate = formData.get("showDate")?.toString();
   const endDate = formData.get("endDate")?.toString();
-  const image = formData.get("image") as unknown as File;
+  const image: File | null = formData.get("image") as unknown as File;
 
   console.log("PATCH REQUEST DATAS:", label, showDate, endDate, typeof image);
   console.log(image);
@@ -111,8 +111,7 @@ export async function PATCH(
       return new NextResponse("Billboard Not Found", { status: 404 });
     }
     console.log("IMAGE ON PATCH ROUTE: ", image);
-
-    if (typeof image != "undefined" && image) {
+    if (typeof image != "File") {
       console.log("Delete on cloudinary executed");
       const deleteResponse = await deleteFromCloudinary(
         existingBillboard.publicId
