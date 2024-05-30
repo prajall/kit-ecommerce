@@ -1,8 +1,6 @@
 import { isAdmin } from "@/lib/authMiddleware";
 import { uploadOnCloudinary } from "@/lib/cloudinary";
 import { prisma } from "@/lib/prisma";
-import { format } from "date-fns";
-import { NextApiRequest } from "next";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
