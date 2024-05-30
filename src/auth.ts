@@ -29,7 +29,7 @@ const config: NextAuthConfig = {
           credentials.email == "prajalmhrzn@gmail.com" &&
           credentials.password == "password"
         ) {
-          return { email: "prajalmhrzn@gmail.com" };
+          return true;
         }
 
         try {
