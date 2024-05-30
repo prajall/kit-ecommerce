@@ -1,0 +1,22 @@
+{
+  "node": {
+    "3b40c3becd112956f0a043a041db1d3b0e875d9f": {
+      "workers": {
+        "app/dashboard/billboard/page": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22E%3A%5C%5CWEB%5C%5CNEXT%5C%5Ckly-ecommerce%5C%5Csrc%5C%5Clib%5C%5CauthMiddleware.ts%22%2C%5B%22isAdmin%22%2C%22%24%24ACTION_0%22%5D%5D%5D&__client_imported__=true!"
+      },
+      "layer": {
+        "app/dashboard/billboard/page": "action-browser"
+      }
+    },
+    "450bba108b9fd8c7e3669be520e0f75d73e59461": {
+      "workers": {
+        "app/dashboard/billboard/page": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22E%3A%5C%5CWEB%5C%5CNEXT%5C%5Ckly-ecommerce%5C%5Csrc%5C%5Clib%5C%5CauthMiddleware.ts%22%2C%5B%22isAdmin%22%2C%22%24%24ACTION_0%22%5D%5D%5D&__client_imported__=true!"
+      },
+      "layer": {
+        "app/dashboard/billboard/page": "action-browser"
+      }
+    }
+  },
+  "edge": {},
+  "encryptionKey": "KIr9C9VyAAuzaq0ZYfp0SqozRiz4k8hPqlDKWXCuIis="
+}
