@@ -99,3 +99,5 @@ const dummyProducts: product[] = [
 ];
 
 export default dummyProducts;
+
+//add new product
