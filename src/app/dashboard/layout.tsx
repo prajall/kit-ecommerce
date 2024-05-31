@@ -1,3 +1,4 @@
+"use client";
 import { auth } from "@/auth";
 import { CommandSeparator } from "@/components/ui/command";
 import { DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
@@ -10,14 +11,19 @@ import { IconType } from "react-icons/lib";
 
 import Link from "next/link";
 import DashboardSidebar from "./(components)/DashboardSidebar";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 const font = Poppins({ weight: "400", subsets: ["latin"] });
 
 const AdminLayout = async ({ children }: { children: React.ReactNode }) => {
-  const user = await auth();
+  const router = useRouter();
+  const { data } = useSession();
+  // const user = await auth();
+  console.log(data);
 
-  if (!user || user.user?.email != "prajalmhrzn@gmail.com") {
-    redirect("/");
+  if (!data || data.user?.email != "prajalmhrzn@gmail.com") {
+    router.push("/");
   }
 
   return (
