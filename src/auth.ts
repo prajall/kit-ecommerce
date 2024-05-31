@@ -25,13 +25,6 @@ const config: NextAuthConfig = {
         },
       },
       async authorize(credentials) {
-        if (
-          credentials.email == "prajalmhrzn@gmail.com" &&
-          credentials.password == "password"
-        ) {
-          return true;
-        }
-
         try {
           const user = await prisma.user.findUnique({
             where: { email: credentials.email },
