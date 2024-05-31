@@ -45,33 +45,36 @@ const config: NextAuthConfig = {
   ],
   callbacks: {
     async signIn(user) {
-      try {
-        const existingUser = await prisma.user
-          .findUnique({ where: { email: user.user.email } })
-          .catch((err) => {
-            console.log("error checking user: ", err);
-          });
-        console.log("existingUser: ", existingUser);
-
-        if (!existingUser) {
-          console.log("no existingUser Creating new user");
-
-          try {
-            const newUser = prisma.user.create({
-              data: {
-                email: user.user.email,
-                // name: user.user.name,
-                image: user.user.image,
-              },
+      if (user.account?.provider == "google");
+      {
+        try {
+          const existingUser = await prisma.user
+            .findUnique({ where: { email: user.user.email } })
+            .catch((err) => {
+              console.log("error checking user: ", err);
             });
-            console.log("new Google user created: ", newUser);
-            return { email: user.user.email, name: user.user.name };
-          } catch (err) {
-            console.log("/auth Error Creating new user: ", err);
+          console.log("existingUser: ", existingUser);
+
+          if (!existingUser) {
+            console.log("no existingUser Creating new user");
+
+            try {
+              const newUser = prisma.user.create({
+                data: {
+                  email: user.user.email,
+                  // name: user.user.name,
+                  image: user.user.image,
+                },
+              });
+              console.log("new Google user created: ", newUser);
+              return { email: user.user.email, name: user.user.name };
+            } catch (err) {
+              console.log("/auth Error Creating new user: ", err);
+            }
           }
+        } catch (err) {
+          console.log("/auth Error Signing: ", err);
         }
-      } catch (err) {
-        console.log("/auth Error Signing: ", err);
       }
 
       return true;
