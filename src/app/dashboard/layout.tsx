@@ -12,9 +12,9 @@ const AdminLayout = async ({ children }: { children: React.ReactNode }) => {
   const user = await auth();
   console.log(user);
 
-  if (!user || user.user?.email != "prajalmhrzn@gmail.com") {
-    redirect("/");
-  }
+  // if (!user || user.user?.email != "prajalmhrzn@gmail.com") {
+  //   redirect("/");
+  // }
 
   return (
     <>
