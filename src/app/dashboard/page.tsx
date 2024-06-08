@@ -5,5 +5,4 @@ const Admin = () => {
   redirect("/dashboard/analytics");
   return null;
 };
-
 export default Admin;
