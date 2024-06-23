@@ -23,7 +23,7 @@ const Footer = () => {
     "Checkout",
   ];
   return (
-    <MaxWidthWrapper className="flex text-white mx-auto pt-4 text-xs border-zinc-600 border-t">
+    <MaxWidthWrapper className="flex text-white mx-auto pt-4 text-xs border-zinc-600 border-t z-50">
       <div className="w-1/4 pr-4">
         <ul>
           <li className="py-1">
