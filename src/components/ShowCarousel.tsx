@@ -33,20 +33,20 @@ const ShowCarousel = () => {
   return (
     <Carousel className="relative">
       <CarouselPrevious className="absolute top-1/2 left-2 z-10 -translate-y-1/2 bg-opacity-50 " />
-      <CarouselContent className="shadow-lg">
-        <CarouselItem>
+      <CarouselContent className="shadow-lg ">
+        <CarouselItem className="">
           <img
             src="https://marketplace.canva.com/EAFm8iOoAwE/2/0/1600w/canva-beige-aesthetic-fashion-billboard-6ClZyJWO5cA.jpg"
             alt="ImageBanner"
-            className="w-full  mx-auto"
+            className="w-full mx-auto"
           />
         </CarouselItem>
         {billboards.map((billboard) => (
-          <CarouselItem key={billboard.id}>
+          <CarouselItem key={billboard.id} className="overflow-hidden ">
             <img
               src={billboard.imageUrl}
               alt="ImageBanner"
-              className="w-full mx-auto"
+              className="w-full mx-auto max-h-[420px] aspect-[3/1]"
             />
           </CarouselItem>
         ))}

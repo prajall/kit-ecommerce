@@ -1,4 +1,4 @@
-//@ts-nocheck
+// @ts-nocheck
 "use client";
 
 import { Button } from "@/components/ui/button";
@@ -280,7 +280,7 @@ const EditBillboardForm: React.FC<BillboardFormProps> = ({
                               </p>
                             </div>
                           )}
-                          {selectedFile && (
+                          {/* {selectedFile && (
                             <>
                               <img
                                 src={window.URL.createObjectURL(selectedFile)}
@@ -288,7 +288,7 @@ const EditBillboardForm: React.FC<BillboardFormProps> = ({
                                 className="max-h-[150px]"
                               />
                             </>
-                          )}
+                          )} */}
                         </div>
 
                         {selectedFile && (
