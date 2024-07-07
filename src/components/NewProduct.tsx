@@ -1,9 +1,7 @@
 "use client";
 import React from "react";
 import products from "@/products";
-import Image from "next/image";
 import ProductCard from "@/components/ProductCard";
-import MaxWidthWrapper from "./MaxWidthWrapper";
 import ProductLists from "./ProductLists";
 
 const NewProduct = () => {
