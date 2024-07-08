@@ -1,9 +1,19 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Chart from "react-apexcharts";
 import chartOptions from "./chartoptions";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Button } from "@/components/ui/button";
 
 const App = () => {
+  const [category, setCategory] = useState(0);
+  const [index, setIndex] = useState(0);
+
   const [chartData, setChartData] = useState({
     options: {
       chart: {
@@ -37,30 +47,84 @@ const App = () => {
     ],
   });
 
-  const handleClick = () => {
+  const handleChart = () => {
     setChartData({
       ...chartData,
       options: {
         ...chartData.options,
         xaxis: {
           ...chartData.options.xaxis,
-          categories: chartOptions[1].data[0].data.categories,
+          categories: chartOptions[category].data[index].data.categories,
         },
       },
       series: [
         {
           ...chartData.series[0],
-          data: chartOptions[1].data[0].data.values,
+          data: chartOptions[category].data[index].data.values,
         },
       ],
     });
 
-    console.log(chartData);
+    // console.log(chartData);
   };
+
+  useEffect(() => {
+    // handleChart();
+  }, [category]);
+  useEffect(() => {
+    // handleChart();
+  }, [index]);
 
   return (
     <>
-      <button onClick={handleClick}>click</button>
+      {/* <button onClick={handleClick}>click</button> */}
+      <div className="flex gap-3">
+        <DropdownMenu>
+          <DropdownMenuTrigger>
+            {chartOptions[category].name}
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            {chartOptions.map((option, index) => {
+              return (
+                <DropdownMenuItem
+                  onClick={() => {
+                    setCategory(index);
+                  }}
+                >
+                  {option.name}
+                </DropdownMenuItem>
+              );
+            })}
+          </DropdownMenuContent>
+        </DropdownMenu>
+        <div className="flex items-center">
+          <Button variant="ghost" className="p-2">
+            +
+          </Button>
+          <div>
+            <DropdownMenu>
+              <DropdownMenuTrigger>{index}</DropdownMenuTrigger>
+              {/* {chartOptions[category].data[index].name} */}
+              <DropdownMenuContent>
+                {chartOptions[category].data.map((option, index) => {
+                  return (
+                    <DropdownMenuItem
+                      onClick={() => {
+                        setIndex(index);
+                      }}
+                    >
+                      {option.name}
+                    </DropdownMenuItem>
+                  );
+                })}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+          <Button variant="ghost" className="p-2">
+            -
+          </Button>
+        </div>
+      </div>
       <div className="app w-full sm:w-1/2">
         <div className="row">
           <div className="mixed-chart">

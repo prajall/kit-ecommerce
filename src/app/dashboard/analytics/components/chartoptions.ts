@@ -2,7 +2,112 @@
 
 export const chartOptions = [
   {
-    name: "Month",
+    name: "Yearly",
+    data: [
+      {
+        name: "2020",
+        data: {
+          categories: [
+            "Jan",
+            "Feb",
+            "Mar",
+            "Apr",
+            "May",
+            "Jun",
+            "Jul",
+            "Aug",
+            "Sep",
+            "Oct",
+            "Nov",
+            "Dec",
+          ],
+          values: [30, 35, 33, 40, 38, 45, 50, 55, 53, 60, 58, 65],
+        },
+      },
+      {
+        name: "2021",
+        data: {
+          categories: [
+            "Jan",
+            "Feb",
+            "Mar",
+            "Apr",
+            "May",
+            "Jun",
+            "Jul",
+            "Aug",
+            "Sep",
+            "Oct",
+            "Nov",
+            "Dec",
+          ],
+          values: [65, 70, 68, 75, 73, 80, 85, 90, 88, 95, 93, 100],
+        },
+      },
+      {
+        name: "2022",
+        data: {
+          categories: [
+            "Jan",
+            "Feb",
+            "Mar",
+            "Apr",
+            "May",
+            "Jun",
+            "Jul",
+            "Aug",
+            "Sep",
+            "Oct",
+            "Nov",
+            "Dec",
+          ],
+          values: [100, 105, 103, 110, 108, 115, 120, 125, 123, 130, 128, 135],
+        },
+      },
+      {
+        name: "2023",
+        data: {
+          categories: [
+            "Jan",
+            "Feb",
+            "Mar",
+            "Apr",
+            "May",
+            "Jun",
+            "Jul",
+            "Aug",
+            "Sep",
+            "Oct",
+            "Nov",
+            "Dec",
+          ],
+          values: [135, 140, 138, 145, 143, 150, 155, 160, 158, 165, 163, 170],
+        },
+      },
+      {
+        name: "2024",
+        data: {
+          categories: [
+            "Jan",
+            "Feb",
+            "Mar",
+            "Apr",
+            "May",
+            "Jun",
+            "Jul",
+            "Aug",
+            "Sep",
+            "Oct",
+            "Nov",
+            "Dec",
+          ],
+          values: [170, 175, 173, 180, 178, 185, 190, 195, 193, 200, 198, 205],
+        },
+      },
+    ],
+  },
+  {
+    name: "Monthly",
     data: [
       {
         name: "January",
