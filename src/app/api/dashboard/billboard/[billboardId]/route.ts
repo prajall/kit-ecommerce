@@ -69,7 +69,6 @@ export async function PATCH(
   request: NextRequest,
   { params }: { params: { billboardId: string } }
 ) {
-  console.log("patchRequest made");
   const { searchParams } = new URL(request.url);
   // const billboardId = searchParams.get("billboardId");
   const billboardId = params.billboardId;

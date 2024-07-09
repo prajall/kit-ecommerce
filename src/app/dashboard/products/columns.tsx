@@ -1,21 +1,20 @@
 "use client";
 
+import { ProductProp } from "@/types";
 import { ColumnDef } from "@tanstack/react-table";
-import BillboardAction from "../(components)/BillboardAction";
-import { BillboardProp } from "../../../types";
 
-export const columns: ColumnDef<BillboardProp>[] = [
+export const columns: ColumnDef<ProductProp>[] = [
   {
     accessorKey: "imageUrl",
     header: "Image",
     cell: ({ row }) => {
       const image: string = row.getValue("imageUrl");
-      return <img src={image} className="max-h-10" alt="Billboard" />;
+      return <img src={image} className="max-h-10" alt="Product" />;
     },
   },
   {
-    accessorKey: "label",
-    header: "Label",
+    accessorKey: "title",
+    header: "Title",
   },
   {
     accessorKey: "createdAt",
@@ -26,7 +25,7 @@ export const columns: ColumnDef<BillboardProp>[] = [
     header: "Action",
     cell: ({ row }) => {
       const link: string = row.original.id;
-      return <BillboardAction billboardId={link} />;
+      return <p>...</p>;
     },
   },
 ];

@@ -2,18 +2,14 @@
 import { Button } from "@/components/ui/button";
 import { isAdmin } from "@/lib/authMiddleware";
 import axios from "axios";
-import { Router } from "express";
-import { Plus, Trash } from "lucide-react";
-import Image from "next/image";
-import Link from "next/link";
+import { format } from "date-fns";
+import { Plus } from "lucide-react";
 import { useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { DataTable } from "../(components)/DataTable";
-import { columns } from "./columns";
-import { format, formatDate } from "date-fns";
-import toast from "react-hot-toast";
 import Header from "../(components)/Header";
-import { BillboardProp } from "./types";
+import { BillboardProp } from "../../../types";
+import { columns } from "./columns";
 
 const BillboardPage = () => {
   const [billboards, setBillboards] = useState<BillboardProp[]>([]);
@@ -45,25 +41,6 @@ const BillboardPage = () => {
     fetchBillboards();
   }, []);
 
-  const handleDelete = async (billboardId: string) => {
-    console.log(billboardId);
-    try {
-      const response = await axios.delete(
-        `/api/dashboard/billboard/${billboardId}`
-      );
-      console.log(response);
-      if (response.status == 200) {
-        const filteredBillboards = billboards.filter(
-          (billboard) => billboard.id !== billboardId
-        );
-        console.log(filteredBillboards);
-        setBillboards(filteredBillboards);
-      }
-    } catch (error) {
-      console.log("delete error: ", error);
-    }
-  };
-
   const handleAddNew = () => {
     router.push("/dashboard/billboard/new");
   };
@@ -74,12 +51,13 @@ const BillboardPage = () => {
 
   return (
     <>
-      <div className="space-y-4">
+      <div className="">
         <div className="flex justify-between py-3 items-center ">
           <Header
             title={`Billboards (${billboards.length})`}
             description="Manage Billboards for you store"
           />
+
           <Button
             variant={"default"}
             className="flex gap-1 p-0 md:px-4 md:py-2 aspect-square md:aspect-auto rounded-full"

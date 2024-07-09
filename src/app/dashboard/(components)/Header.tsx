@@ -8,10 +8,9 @@ interface HeaderProp {
 
 const Header: React.FC<HeaderProp> = ({ title, description }) => {
   return (
-    <div className="pt-3">
+    <div className="py-3">
       <h2 className="text-2xl font-semibold py-1">{title}</h2>
-      {/* <p className="text-muted-foreground text-xs">{description}</p> */}
-      <Separator className="mt-2 mb-0" />
+      <p className="text-muted-foreground text-xs">{description}</p>
     </div>
   );
 };

@@ -5,7 +5,7 @@ import Header from "../../(components)/Header";
 import BillboardForm from "./BillboardForm";
 import toast from "react-hot-toast";
 import { useEffect, useState } from "react";
-import { BillboardProp } from "../types";
+import { BillboardProp } from "@/types";
 import { useRouter } from "next/navigation";
 import Loading from "@/app/loading";
 import EditBillboardForm from "./EditBillboard";
