@@ -200,7 +200,7 @@ export const chartOptions = [
     name: "Week",
     data: [
       {
-        name: "Week1",
+        name: "Week 1",
         data: {
           categories: [
             "Sunday",
@@ -215,7 +215,7 @@ export const chartOptions = [
         },
       },
       {
-        name: "Week2",
+        name: "Week 2",
         data: {
           categories: [
             "Sunday",
@@ -230,7 +230,7 @@ export const chartOptions = [
         },
       },
       {
-        name: "Week3",
+        name: "Week 3",
         data: {
           categories: [
             "Sunday",
@@ -245,7 +245,7 @@ export const chartOptions = [
         },
       },
       {
-        name: "Week4",
+        name: "Week 4",
         data: {
           categories: [
             "Sunday",

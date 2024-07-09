@@ -9,10 +9,11 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
+import { ArrowDown, ChevronDown } from "lucide-react";
 
 const App = () => {
   const [category, setCategory] = useState(0);
-  const [index, setIndex] = useState(0);
+  const [index, setIndex] = useState(chartOptions[category].data.length - 1);
 
   const [chartData, setChartData] = useState({
     options: {
@@ -21,20 +22,7 @@ const App = () => {
         toolbar: { show: false },
       },
       xaxis: {
-        categories: [
-          "Jan",
-          "Feb",
-          "Mar",
-          "Apr",
-          "May",
-          "Jun",
-          "Jul",
-          "Aug",
-          "Sep",
-          "Oct",
-          "Nov",
-          "Dec",
-        ],
+        categories: chartOptions[category].data[index].data.categories,
       },
 
       colors: ["#000"],
@@ -42,7 +30,7 @@ const App = () => {
     series: [
       {
         name: "Sales",
-        data: [30, 40, 45, 50, 49, 60, 70, 91, 100, 120, 130, 126],
+        data: chartOptions[category].data[index].data.values,
       },
     ],
   });
@@ -65,67 +53,84 @@ const App = () => {
       ],
     });
 
-    // console.log(chartData);
+    console.log(chartData);
+  };
+
+  const handleCategory = (categoryIndex: number) => {
+    const maxIndex = chartOptions[categoryIndex].data.length - 1;
+    setIndex(maxIndex);
+    setCategory(categoryIndex);
+    handleChart();
+  };
+  const handleIndex = (indexIndex: number) => {
+    setIndex(indexIndex);
+    handleChart();
   };
 
   useEffect(() => {
-    // handleChart();
-  }, [category]);
-  useEffect(() => {
-    // handleChart();
-  }, [index]);
+    handleChart();
+  }, [category, index]);
 
   return (
     <>
       {/* <button onClick={handleClick}>click</button> */}
-      <div className="flex gap-3">
-        <DropdownMenu>
-          <DropdownMenuTrigger>
-            {chartOptions[category].name}
-          </DropdownMenuTrigger>
-          <DropdownMenuContent>
-            {chartOptions.map((option, index) => {
-              return (
-                <DropdownMenuItem
-                  onClick={() => {
-                    setCategory(index);
-                  }}
-                >
-                  {option.name}
-                </DropdownMenuItem>
-              );
-            })}
-          </DropdownMenuContent>
-        </DropdownMenu>
-        <div className="flex items-center">
-          <Button variant="ghost" className="p-2">
-            +
-          </Button>
-          <div>
-            <DropdownMenu>
-              <DropdownMenuTrigger>{index}</DropdownMenuTrigger>
-              {/* {chartOptions[category].data[index].name} */}
-              <DropdownMenuContent>
-                {chartOptions[category].data.map((option, index) => {
-                  return (
-                    <DropdownMenuItem
-                      onClick={() => {
-                        setIndex(index);
-                      }}
-                    >
-                      {option.name}
-                    </DropdownMenuItem>
-                  );
-                })}
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
-          <Button variant="ghost" className="p-2">
-            -
-          </Button>
-        </div>
-      </div>
       <div className="app w-full sm:w-1/2">
+        <div className="flex gap-3 justify-end ">
+          <DropdownMenu>
+            <DropdownMenuTrigger>
+              <div className="flex py-1 px-3 items-center gap-1 border bg-gray-100 bg-opacity-60 rounded-full">
+                {chartOptions[category].name}
+                <ChevronDown size={13} />
+              </div>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              {chartOptions.map((option, index) => {
+                return (
+                  <DropdownMenuItem
+                    onClick={() => {
+                      handleCategory(index);
+                    }}
+                  >
+                    {option.name}
+                  </DropdownMenuItem>
+                );
+              })}
+            </DropdownMenuContent>
+          </DropdownMenu>
+          <div className="flex items-center">
+            {/* <Button variant="ghost" className="p-2">
+            +
+          </Button> */}
+            <div>
+              <DropdownMenu>
+                <DropdownMenuTrigger>
+                  <div className="flex py-1 px-3 items-center gap-1 border bg-gray-100 bg-opacity-60 rounded-full">
+                    {/* {index} */}
+                    {chartOptions[category].data[index].name}
+                    <ChevronDown size={13} />
+                  </div>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  {chartOptions[category].data.map((option, index) => {
+                    return (
+                      <DropdownMenuItem
+                        onClick={() => {
+                          handleIndex(index);
+                        }}
+                      >
+                        {option.name}
+                      </DropdownMenuItem>
+                    );
+                  })}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+            {/* <Button variant="ghost" className="p-2">
+            -
+          </Button> */}
+          </div>
+        </div>
+
         <div className="row">
           <div className="mixed-chart">
             <Chart
