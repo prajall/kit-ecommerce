@@ -9,7 +9,6 @@ export const columns: ColumnDef<ProductProp>[] = [
     header: "Image",
     cell: ({ row }) => {
       const image: string = row.original.image || "";
-      console.log(row);
       return <img src={image} className="max-h-10" alt="Product" />;
     },
   },

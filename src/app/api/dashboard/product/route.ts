@@ -8,7 +8,8 @@ export async function POST(request: NextRequest) {
   const description = formData.get("description")?.toString();
   const price = parseFloat(formData.get("price")?.toString() || "0");
   const image = formData.get("image") as unknown as File;
-  const category = formData.getAll("category").map((cat) => cat.toString());
+  const categoryString = formData.get("category")?.toString();
+  const category = categoryString?.split(",") || [];
 
   console.log(title, description, price, typeof image, category);
 

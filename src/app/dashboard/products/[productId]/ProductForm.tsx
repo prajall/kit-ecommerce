@@ -43,34 +43,40 @@ const ProductForm = ({}) => {
 
   const router = useRouter();
 
-  const categoryOptions = ["men", "women", "tshirt", "pant", "shoes", "shirt"];
+  const categoryOptions = ["Men", "Women", "Tshirt", "Pant", "Shoes", "Shirt"];
 
   const handleCategorySelection = (category: string) => {
-    event?.preventDefault(); // Uncomment if 'event' is being passed and used
+    event?.preventDefault();
 
-    if (!selectedCategories.includes(category)) {
-      setSelectedCategories([...selectedCategories, category]);
-    } else {
-      const filteredCategories = selectedCategories.filter(
-        (c) => c !== category
-      );
-      setSelectedCategories(filteredCategories);
-    }
-    form.setValue("category", selectedCategories);
+    setSelectedCategories((prevSelectedCategories) => {
+      let updatedCategories;
+      if (!prevSelectedCategories.includes(category)) {
+        console.log("Adding ", category);
+        updatedCategories = [...prevSelectedCategories, category];
+      } else {
+        updatedCategories = prevSelectedCategories.filter(
+          (c) => c !== category
+        );
+      }
+      form.setValue("category", updatedCategories);
+      console.log(updatedCategories);
+      return updatedCategories;
+    });
   };
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
   });
   async function onSubmit(values: z.infer<typeof formSchema>) {
     console.group(values);
-    setIsSubmitting(true);
+    // setIsSubmitting(true);
     const formData = new FormData();
     formData.append("image", values.image);
     formData.append("title", values.title);
     formData.append("description", values.description);
     formData.append("price", values.price);
     formData.append("category", values.category.join(","));
-    console.log(formData);
+    console.log(values.category.join(","));
 
     try {
       const response = await axios.post("/api/dashboard/product", formData, {
@@ -88,7 +94,7 @@ const ProductForm = ({}) => {
       console.error("Error adding Product:", error);
     } finally {
       setIsSubmitting(false);
-      // router.push("/dashboard/products");
+      router.push("/dashboard/products");
     }
   }
 
@@ -99,10 +105,6 @@ const ProductForm = ({}) => {
       form.setValue("image", file);
     }
   };
-  // {(e) => {
-  //   setSelectedFile(e.target.files?e.target.files[0]:null);
-  //   form.setValue("image",e.target.files?e.target.files[0]:null );
-  // }}
 
   const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
@@ -214,9 +216,9 @@ const ProductForm = ({}) => {
                               key={category}
                               className={cn(
                                 selectedCategories.includes(category)
-                                  ? "bg-gray-950 text-white"
+                                  ? "bg-gray-900 text-white"
                                   : "",
-                                "w-24 border border-gray-600 rounded-full px-2"
+                                "w-20 text-xs py-1 border border-gray-600 rounded-full px-2"
                               )}
                             >
                               <span className="flex gap-1 items-center justify-center">
@@ -285,7 +287,7 @@ const ProductForm = ({}) => {
                               <img
                                 src={window.URL.createObjectURL(selectedFile)}
                                 alt={selectedFile.name}
-                                className="max-h-full max-w-full"
+                                className="max-h-full max-w-auto object-contain"
                               />
                             </>
                           )}
