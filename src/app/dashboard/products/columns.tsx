@@ -5,10 +5,11 @@ import { ColumnDef } from "@tanstack/react-table";
 
 export const columns: ColumnDef<ProductProp>[] = [
   {
-    accessorKey: "imageUrl",
+    accessorKey: "image",
     header: "Image",
     cell: ({ row }) => {
-      const image: string = row.getValue("imageUrl");
+      const image: string = row.original.image || "";
+      console.log(row);
       return <img src={image} className="max-h-10" alt="Product" />;
     },
   },

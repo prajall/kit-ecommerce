@@ -1,7 +1,6 @@
+import { uploadOnCloudinary } from "@/lib/cloudinary";
+import { prisma } from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma"; // Make sure to adjust the import according to your project structure
-import { deleteFromCloudinary, uploadOnCloudinary } from "@/lib/cloudinary"; // Adjust according to your project structure
-import { AnyAaaaRecord } from "dns";
 
 export async function GET(
   request: NextRequest,

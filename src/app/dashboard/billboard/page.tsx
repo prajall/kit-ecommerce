@@ -67,7 +67,12 @@ const BillboardPage = () => {
             <span className="hidden md:flex">Add New Billboard</span>
           </Button>
         </div>
-        <DataTable columns={columns} data={billboards} isFetching={fetching} />
+        <DataTable
+          columns={columns}
+          data={billboards}
+          isFetching={fetching}
+          loadingText="Loading Billboards..."
+        />
       </div>
     </>
   );

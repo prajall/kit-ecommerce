@@ -12,7 +12,7 @@ export interface BillboardProp {
 export interface ProductProp {
   id: string;
   title: string;
-  imageUrl?: string;
+  image?: string;
   price: number;
   description: string;
   category: string[];

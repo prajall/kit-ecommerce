@@ -21,12 +21,14 @@ interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   isFetching: Boolean;
+  loadingText: string;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
   isFetching,
+  loadingText,
 }: DataTableProps<TData, TValue>) {
   const table = useReactTable({
     data,
@@ -60,7 +62,7 @@ export function DataTable<TData, TValue>({
           <TableBody>
             <TableRow>
               <TableCell colSpan={columns.length} className="h-24 text-center">
-                Loading Billboards...
+                {loadingText}
               </TableCell>
             </TableRow>
           </TableBody>
